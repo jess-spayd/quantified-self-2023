@@ -169,12 +169,25 @@ max(naps$duration_h)
 
 
 ggplot(naps, aes(x=dayOfWeek)) +
-  geom_bar(fill='white',color='gray')+
-  theme_classic()
+  geom_bar(fill="aquamarine3")+
+  theme_classic() +
+  labs(title='Naps by Day of the Week',
+       x="Day",
+       y='Frequency')+
+  theme(plot.title = element_text(face = "bold"))+
+  scale_y_continuous(breaks=seq(from = 0, to = 11, by = 2))
+
+
 
 ggplot(naps, aes(x=month)) +
-  geom_bar(fill='white',color='gray') +
-  theme_classic()
+  geom_bar(fill='gold2') +
+  theme_classic()+
+  labs(title='Naps per Month',
+       x='Month',
+       y='Frequency')+
+  theme(plot.title = element_text(face = "bold")) +
+  scale_y_continuous(breaks=seq(from = 0, to = 9, by = 3))
+
 
 
 naps_month <- naps %>%
