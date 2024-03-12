@@ -21,12 +21,12 @@ sleep_log_2023$endTime_hms <- hms::as_hms(sleep_log_2023$endTime)
 
 ## Months
 
-sleep_log_2023$month <- month(sleep_log_2023$dateOfSleep)
-
+sleep_log_2023$month <- month(sleep_log_2023$dateOfSleep, label=T)
 
 ## Days of the week
 
-sleep_log_2023$dayOfWeek <- wday(sleep_log_2023$dateOfSleep)
+sleep_log_2023$dayOfWeek <- wday(sleep_log_2023$dateOfSleep, label = T)
+
 
 # Start time hour
 sleep_log_2023$startTime_bin <- as.character(sleep_log_2023$startTime_hms)
@@ -161,18 +161,20 @@ min(naps$duration_h)
 max(naps$duration_h)
 
 
-ggplot(naps, aes(startTime_hms)) +
-  geom_histogram(binwidth=60*60, fill='white',color='gray')
+#ggplot(naps, aes(startTime_hms)) +
+ # geom_histogram(binwidth=60*60, fill='white',color='gray')
 
-ggplot(naps, aes(endTime_hms)) +
-  geom_histogram(binwidth=60*60, fill='white',color='gray')
+#ggplot(naps, aes(endTime_hms)) +
+ # geom_histogram(binwidth=60*60, fill='white',color='gray')
 
 
 ggplot(naps, aes(x=dayOfWeek)) +
-  geom_histogram(bins=7, fill='white',color='gray')
+  geom_bar(fill='white',color='gray')+
+  theme_classic()
 
 ggplot(naps, aes(x=month)) +
-  geom_histogram(bins=12, fill='white',color='gray')
+  geom_bar(fill='white',color='gray') +
+  theme_classic()
 
 
 naps_month <- naps %>%
@@ -181,7 +183,8 @@ naps_month <- naps %>%
                list(mean_duration_h = mean))
 
 ggplot(naps_month, aes(x=month, y=mean_duration_h)) + 
-  geom_bar(stat='identity')
+  geom_bar(stat='identity') +
+  theme_classic()
 
 
 naps_dayOfWeek <- naps %>%
@@ -190,7 +193,8 @@ naps_dayOfWeek <- naps %>%
                list(mean_duration_h = mean))
 
 ggplot(naps_dayOfWeek, aes(x=dayOfWeek, y=mean_duration_h)) + 
-  geom_bar(stat='identity')
+  geom_bar(stat='identity') +
+  theme_classic()
 
 ## SLEEPS
 
@@ -205,16 +209,99 @@ max(sleep_no_naps_grouped$total_duration_h)
 min(sleep_no_naps_grouped$total_duration_h)
 
 
+sleep_no_naps$startTime_bin_relevel <- as_factor(sleep_no_naps$startTime_bin)
+sleep_no_naps$startTime_bin_relevel <- fct_relevel(sleep_no_naps$startTime_bin_relevel, 
+                                                   '20','21','22','23','0','1',
+                                                   '4')
+sleep_no_naps$startTime_bin_relevel <- factor(sleep_no_naps$startTime_bin_relevel,
+                                              exclude = '4')
+
+sleep_start <- subset(sleep_no_naps, startTime_bin != 4)
+
 ggplot(sleep_no_naps, aes(startTime_bin)) +
   geom_histogram(bins=24, fill="white", color='gray')
+
+ggplot(sleep_start, aes(startTime_bin_relevel)) +
+  geom_bar(fill="chartreuse3")+
+  theme_classic() +
+  labs(title='Distribution of Bedtimes',
+       x='Hour',
+       y='Count of Sleeps') +
+  theme(plot.title = element_text(face = "bold"))
+
+
+
+sleep_no_naps$endTime_bin_relevel <- as_factor(sleep_no_naps$endTime_bin)
+
+
 
 min(sleep_no_naps$endTime_bin)
 max(sleep_no_naps$endTime_bin)
 
 ggplot(sleep_no_naps, aes(endTime_bin)) +
-  geom_histogram(bins=11, fill="white", color='gray')
+  geom_histogram(bins=11, fill="white", color='gray') +
+  theme_classic()
+
+sleep_end <- subset(sleep_no_naps, endTime_bin > 3 &
+                      endTime_bin < 12)
+
+ggplot(sleep_end, aes(endTime_bin_relevel)) +
+  geom_bar(fill="magenta3") +
+  theme_classic()+
+  labs(title='Distribution of Wake Up Times',
+       x='Hour',
+       y='Count of Sleeps')+
+  theme(plot.title = element_text(face = "bold"))
 
 mean(sleep_no_naps$endTime_bin)
+
+
+sleep_start$startTime_skew <- sleep_start$startTime_bin_relevel
+sleep_start$startTime_skew <- fct_recode(sleep_start$startTime_skew,
+                                         '1' = '20',
+                                         '2' = '21',
+                                         '3' = '22',
+                                         '4' = '23',
+                                         '5' = '0',
+                                         '6' = '1')
+sleep_start$startTime_skew <- as.integer(sleep_start$startTime_skew)
+sleep_start$startTime_skew <- sleep_start$startTime_skew + 19
+
+start_month <- sleep_start %>%
+  group_by(month) %>%
+  summarise_at(vars(startTime_skew),
+               list(mean_startTime = mean))
+
+ggplot(start_month, aes(x=month, y=mean_startTime)) +
+  geom_bar(stat='identity') +
+  geom_smooth(method = 'lm')
+
+
+end_month <- sleep_no_naps %>%
+  group_by(month) %>%
+  summarise_at(vars(endTime_bin),
+               list(mean_endTime = mean))
+
+ggplot(end_month, aes(x=month, y=mean_endTime)) +
+  geom_bar(stat='identity') +
+  geom_smooth(method = 'lm')
+
+
+start_dayOfWeek <- sleep_start %>%
+  group_by(dayOfWeek) %>%
+  summarise_at(vars(startTime_skew),
+               list(mean_startTime = mean))
+
+end_dayOfWeek <- sleep_no_naps %>%
+  group_by(dayOfWeek) %>%
+  summarise_at(vars(endTime_bin),
+               list(mean_endTime = mean))
+
+
+ggplot(start_dayOfWeek, aes(x=dayOfWeek, y=mean_startTime)) +
+  geom_bar(stat='identity') 
+ggplot(end_dayOfWeek, aes(x=dayOfWeek, y=mean_endTime)) +
+  geom_bar(stat='identity') 
 
 
 
@@ -226,6 +313,9 @@ sleeps_month <- sleep_no_naps %>%
 ggplot(sleeps_month, aes(x=month, y=mean_duration_h)) + 
   geom_bar(stat='identity') +
   geom_smooth(method='lm')
+
+
+
 
 
 sleeps_dayOfWeek <- sleep_no_naps %>%
