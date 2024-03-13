@@ -1,0 +1,11 @@
+entry_id,log_time,log_type,value,meta,entry_category,zone_offset
+a20c7e40-2817-11ed-aa91-79227e28a600,2022-08-29T23:55:44,MOOD,1,{source=Stress, platform=mobile},MOOD,-04:00
+88689530-1d83-11ed-a5d7-55eacae217fb,2022-08-16T12:50:26,MOOD,3,{source=Home, platform=mobile},MOOD,-04:00
+81158050-1ce2-11ed-9c6c-f5134006b1c5,2022-08-15T17:37:43,MOOD,3,{source=Home, platform=mobile},MOOD,-04:00
+00879b80-12d3-11ed-9584-d13e92fdc1cc,2022-08-02T22:21:34,MOOD,2,{source=Stress, platform=mobile},MOOD,-04:00
+b4ff5d70-120e-11ed-9290-c96e94a5ae6b,2022-08-01T22:56:26,MOOD,3,{source=Home, platform=mobile},MOOD,-04:00
+8c7e03b0-11cd-11ed-97e0-0dcb27f2b765,2022-08-01T15:10:02,MOOD,3,{source=Stress, platform=mobile},MOOD,-04:00
+69ffa0f0-11a5-11ed-b3f8-2fce4bf9761e,2022-08-01T10:22:42,MOOD,4,{source=Home, platform=mobile},MOOD,-04:00
+e70ab790-10f3-11ed-87b5-d14eb2c61cd6,2022-07-31T13:12:02,MOOD,3,{source=Home, platform=mobile},MOOD,-04:00
+ed613a40-0ef2-11ed-88ba-4b36491346b5,2022-07-28T23:59:59,MOOD,3,{source=Home, platform=mobile},MOOD,-04:00
+86ef4170-0e76-11ed-9621-9fa4fd4f50b5,2022-07-28T09:09:26,MOOD,3,{source=Stress Onboarding, platform=mobile},MOOD,-04:00
