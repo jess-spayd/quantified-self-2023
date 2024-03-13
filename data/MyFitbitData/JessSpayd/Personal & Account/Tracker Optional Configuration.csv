@@ -1,2 +1,0 @@
-tracker_id,enabled_notification_types,on_right_hand,clock_face,enable_inactivity_alerts,last_updated_ia_time,last_reboot_time,payments_enabled,last_successful_wifi_connection_time,last_successful_wifi_connectionipv4addr,last_successful_wifi_connectionipv6addr,last_successful_wifi_connectionssid,live_data_disabled
-2076423947,"[INCOMING_CALL, TEXT_MESSAGE, CALENDAR, APP_NOTIFICATIONS]",false,,true,2023-10-23T02:04:27.000Z,,false,2023-12-01T04:29:59.000Z,/192.168.0.49,,cantina,
