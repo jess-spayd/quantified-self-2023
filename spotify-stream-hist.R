@@ -64,3 +64,86 @@ ggplot(song_plays, aes(n)) +
 #  slice_tail(n=5) %>%
 #  ggplot(aes(x=trackName,y=n)) +
 #  geom_col()
+
+
+spotify_2023$month <- month(spotify_2023$endTime, label=T)
+
+
+min_by_month <- spotify_2023 %>%
+  group_by(month) %>%
+  summarise_at(vars(minPlayed),
+               list(minSum=sum))
+
+ggplot(min_by_month, aes(x=month,y=minSum))+
+  geom_bar(stat="identity")
+
+
+boygenius_by_month <- spotify_2023 %>%
+  subset(artistName=="boygenius") %>%
+  group_by(month) %>%
+  summarise_at(vars(minPlayed),
+               list(minSum=sum))
+
+
+boygenius_missing_months <- data.frame(month=c("Feb","Mar"),
+                                       minSum=c(0,0))
+
+boygenius_by_month <- rbind(boygenius_by_month, boygenius_missing_months)
+
+
+ggplot(boygenius_by_month, aes(x=month,y=minSum)) +
+  geom_bar(stat="identity")
+
+
+boygenius_2023 <- subset(spotify_2023, artistName=="boygenius")
+
+boygenius_2023$week <- week(boygenius_2023$endTime)
+
+boygenius_time <- boygenius_2023 %>%
+  group_by(week) %>%
+  summarise_at(vars(minPlayed),
+               list(minSum=sum))
+
+
+ggplot(boygenius_time, aes(x=week,y=minSum)) +
+  geom_area()
+
+
+ggplot(boygenius_2023, aes(x=endTime,y=minPlayed))+
+  geom_point()
+
+ggplot(boygenius_by_month, aes(x=month, y=minSum))+
+  geom_line()
+
+boygenius_2023$date <- date(boygenius_2023$endTime)
+
+boygenius_daily <- boygenius_2023 %>%
+  group_by(date) %>%
+  summarise_at(vars(minPlayed),
+               list(minSum=sum))
+  
+
+ggplot(boygenius_daily, aes(x=date,y=minSum))+
+  geom_bar(stat="identity")+
+  geom_vline(xintercept=date("2023-06-16"),color='red')+
+  geom_vline(xintercept=date("2023-09-30"),color='red')
+
+ggplot(boygenius_time, aes(x=week,y=minSum))+
+  geom_bar(stat="identity",fill="black")+
+  geom_vline(xintercept=24.21,color='red')+
+  geom_text(x=29, y=840, label="Jun 16 concert", color='red')+
+  geom_text(x=29, y=805, label="@ Merriweather", color='red')+
+  geom_vline(xintercept=39.36,color='red') +
+  geom_text(x=44, y=840, label="Sep 30 concert", color='red')+
+  geom_text(x=44, y=805, label="@ the Mann", color='red')+
+  geom_vline(xintercept=13.6,color='red') +
+  geom_text(x=9, y=840, label="The Record", color='red')+
+  geom_text(x=9, y=805, label="released Mar 31", color='red')+
+  theme_classic()+
+  labs(title="boygenius Listening by Week",
+       x="Time",
+       y="Minutes Played")+
+  theme(plot.title = element_text(face = "bold"))+
+  scale_x_continuous(breaks=c(0,7,15.7,24.15,33.5,42,50.5),
+                     labels=c("January","February","April","June","August",
+                              "October","December"))

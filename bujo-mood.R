@@ -84,4 +84,11 @@ ggplot(mood_weekday, aes(fill=mood,x=day,y=n))+
   theme(plot.title = element_text(face = "bold"))
 
 
+mood_count <- bujo_mood %>%
+  group_by(mood) %>%
+  count()
 
+ggplot(mood_count, aes(x=mood,y=n)) +
+  geom_bar(stat="identity")
+
+summary(bujo_mood$mood)

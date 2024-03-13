@@ -10,7 +10,15 @@ treemap(nintendo_switch,
         type="index")
 
 
+avg_hours <- nintendo_switch %>%
+  group_by(player) %>%
+  summarise_at(vars("Lifetime Hours on Nintendo Switch"),
+               list(mean_hours=mean))
 
+med_hours <-nintendo_switch %>%
+  group_by(player) %>%
+  summarise_at(vars("Lifetime Hours on Nintendo Switch"),
+               list(median_hours=median))
 
 
 
